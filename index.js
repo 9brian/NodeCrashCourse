@@ -3,29 +3,23 @@ const path = require("path");
 const fs = require("fs");
 
 const server = http.createServer((req, res) => {
-  // if (req.url === "/") {
+  // if (req.url === '/') {
   //   fs.readFile(
-  //     path.join(__dirname, "public", "index.html"),
+  //     path.join(__dirname, 'public', 'index.html'),
   //     (err, content) => {
   //       if (err) throw err;
-  //       res.writeHead(200, { "Content-Type": "text/html" });
+  //       res.writeHead(200, { 'Content-Type': 'text/html' });
   //       res.end(content);
   //     }
   //   );
   // }
 
-  // if (req.url === "/api/users") {
+  // if (req.url === '/api/users') {
   //   const users = [
-  //     {
-  //       name: "Bob Smith",
-  //       age: 40,
-  //     },
-  //     {
-  //       name: "John Doe",
-  //       age: 30,
-  //     },
+  //     { name: 'Bob Smith', age: 40 },
+  //     { name: 'John Doe', age: 30 }
   //   ];
-  //   res.writeHead(200, { "Content-Type": "application/json" });
+  //   res.writeHead(200, { 'Content-Type': 'application/json' });
   //   res.end(JSON.stringify(users));
   // }
 
@@ -61,6 +55,12 @@ const server = http.createServer((req, res) => {
       break;
   }
 
+  // Check if contentType is text/html but no .html file extension
+  if (contentType == "text/html" && extname == "") filePath += ".html";
+
+  // log the filePath
+  console.log(filePath);
+
   // Read File
   fs.readFile(filePath, (err, content) => {
     if (err) {
@@ -69,19 +69,19 @@ const server = http.createServer((req, res) => {
         fs.readFile(
           path.join(__dirname, "public", "404.html"),
           (err, content) => {
-            res.writeHead(200, { "Content-Type": "text/html" });
-            res.end(content, "utf-8");
+            res.writeHead(404, { "Content-Type": "text/html" });
+            res.end(content, "utf8");
           }
         );
       } else {
-        // Some server error
+        //  Some server error
         res.writeHead(500);
-        res.end(`Server error: ${err.code}`);
+        res.end(`Server Error: ${err.code}`);
       }
     } else {
       // Success
       res.writeHead(200, { "Content-Type": contentType });
-      res.end(content, "utf-8");
+      res.end(content, "utf8");
     }
   });
 });
